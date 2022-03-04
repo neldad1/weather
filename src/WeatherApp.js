@@ -15,7 +15,6 @@ const MAX_ZIPLENGTH = 10;
 const WeatherApp = () => {
   const [weatherData, setWeatherData] = useState();
   const [geoPositionDone, setGeoPositionDone] = useState(false);
-  // const [weatherList, setWeatherList] = useEffect([]);
   const [zipCode, setZipCode] = useState('');
   const [countryCode, setCountryCode] = useState();
   const [defaultLocation, setDefaultLocation] = useState({
@@ -24,7 +23,6 @@ const WeatherApp = () => {
   });
 
   const sendAPIRequest = async (posOrZip) => {
-    console.log('API', posOrZip);
     const apiKey = process.env.REACT_APP_OWMAP_API_KEY;
     const url = `${URL}${apiKey}&${posOrZip}`;
     fetch(url)
@@ -33,7 +31,6 @@ const WeatherApp = () => {
         if (data.cod === RESPONSE_OK) {
           setWeatherData(data);
         } else {
-          console.log('Reset input');
           setZipCode('');
         }
       })
@@ -44,7 +41,6 @@ const WeatherApp = () => {
 
   const getIPAPI = () => {
     const token = process.env.REACT_APP_IPINFO_TOKEN;
-    console.log(`${IPAPI_URL}${token}`);
     fetch(`${IPAPI_URL}${token}`)
       .then((response) => response.json())
       .then((data) => {
@@ -56,13 +52,11 @@ const WeatherApp = () => {
   };
 
   const getWeatherByZip = (zip, country) => {
-    console.log(`GET: zip=${zip},${country}`);
     if (zip.length === 0) return;
     sendAPIRequest(`zip=${zip},${country}`);
   };
 
   const geoLocSuccess = (pos) => {
-    console.log(pos);
     sendAPIRequest(`lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
     setGeoPositionDone(true);
     getIPAPI();
@@ -76,13 +70,10 @@ const WeatherApp = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(geoLocSuccess, geoLocError);
-    console.log(`UseEffect`);
   }, []);
 
   useEffect(() => {
-    console.log('Country feth', defaultLocation.zip);
     if (weatherData && geoPositionDone) {
-      console.log('Failed to geozips', geoPositionDone);
       return;
     }
     getWeatherByZip(defaultLocation.zip, defaultLocation.country);
@@ -91,13 +82,11 @@ const WeatherApp = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (zipCode.length >= MIN_ZIPLENGTH && zipCode.length <= MAX_ZIPLENGTH) {
-      console.log('Submit');
       getWeatherByZip(zipCode, countryCode);
     } else {
       setZipCode('');
     }
   };
-  console.log('Rendering');
 
   if (!weatherData) {
     return (

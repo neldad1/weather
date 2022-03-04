@@ -4,10 +4,6 @@ import Temperature from './Temperature';
 import { MainDiv, ColFlexDiv, FlexDiv, P, Icon } from './Weather.styled';
 
 const Weather = ({ currentData }) => {
-  if (!currentData || !currentData.main) {
-    return <>No Data</>;
-  }
-
   const { temp, temp_min, temp_max } = currentData.main;
   const { description, icon } = currentData.weather[0];
 

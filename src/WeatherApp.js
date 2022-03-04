@@ -5,7 +5,6 @@ import Weather from './components/weather/Weather';
 import WeatherAppLoader from './components/WeatherAppLoader';
 
 const DEFAULT_COUNTRY_CODE = 'AU';
-const DEFAULT_ZIP_CODE = 3001;
 const URL =
   'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=';
 const IPAPI_URL = 'http://ip-api.com/json';
@@ -16,9 +15,9 @@ const MAX_ZIPLENGTH = 10;
 
 const WeatherApp = () => {
   const [weatherData, setWeatherData] = useState();
+  // const [weatherList, setWeatherList] = useEffect([]);
   const [zipCode, setZipCode] = useState('');
-  const [countryCode, setCountryCode] = useState(DEFAULT_COUNTRY_CODE);
-  const [isGeoLocDone, setIsGeoLocDone] = useState(false);
+  const [countryCode, setCountryCode] = useState('');
 
   const sendAPIRequest = async (posOrZip) => {
     console.log(posOrZip);
@@ -39,54 +38,46 @@ const WeatherApp = () => {
       });
   };
 
-  const getWeatherByZip = (zip, countryCode) => {
-    console.log('getWeatherByZip');
-    sendAPIRequest(`zip=${zip},${countryCode}`);
-  };
-
-  const geoLocSuccess = (pos) => {
-    sendAPIRequest(`lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
-    setIsGeoLocDone(true);
-  };
-
-  const geoLocError = (err) => {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
-    setIsGeoLocDone(true);
-  };
-
-  const getIPAPI = async () => {
-    await fetch(IPAPI_URL)
+  const getIPAPI = () => {
+    fetch(IPAPI_URL)
       .then((response) => response.json())
       .then((data) => {
         if (data.status === SUCCESS) {
-          if (isGeoLocDone) {
-            getWeatherByZip(data.zip, data.countryCode);
-            setCountryCode(data.countryCode);
-            setZipCode(data.zip);
-          }
+          setZipCode(data.zip);
+          setCountryCode(data.countryCode);
         }
       });
   };
 
-  useEffect(() => {
-    var options = {
-      enableHighAccuracy: false,
-      timeout: 5000,
-      maximumAge: 1,
-    };
+  const getWeatherByZip = () => {
+    sendAPIRequest(`zip=${zipCode},${countryCode}`);
+  };
+
+  const geoLocSuccess = (pos) => {
+    console.log(pos);
+    sendAPIRequest(`lat=${pos.coords.latitude}&lon=${pos.coords.longitude}`);
     getIPAPI();
-    navigator.geolocation.getCurrentPosition(
-      geoLocSuccess,
-      geoLocError,
-      options
-    );
+  };
+
+  const geoLocError = (err) => {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+    getIPAPI();
+  };
+
+  useEffect(() => {
+    getIPAPI();
+    navigator.geolocation.getCurrentPosition(geoLocSuccess, geoLocError);
     console.log(`UseEffect`);
   }, []);
+
+  useEffect(() => {
+    getWeatherByZip();
+  }, [countryCode]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (zipCode.length >= MIN_ZIPLENGTH && zipCode.length <= MAX_ZIPLENGTH) {
-      getWeatherByZip(zipCode, countryCode);
+      sendAPIRequest(`zip=${zipCode},${countryCode}`);
     } else {
       setZipCode('');
     }

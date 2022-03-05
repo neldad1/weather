@@ -13,6 +13,7 @@ const MainDiv = styled.div`
   margin: 0.25em auto;
   align-items: center;
   position: relative;
+  border-radius: 0.2em;
 `;
 
 const H1 = styled.h1`

@@ -15,40 +15,28 @@ const MIN_ZIPLENGTH = 4;
 const MAX_ZIPLENGTH = 10;
 
 const WeatherApp = () => {
-  const [weatherData, setWeatherData] = useState({
-    name: '',
-    temp: 0,
-    min: 0,
-    max: 0,
-    icon: '',
-    description: '',
-    date: '',
-    timezone: '',
-  });
+  const [currLocWeather, setCurrLocWeather] = useState();
   const [weatherList, setWeatherList] = useState([]);
   const [geoPositionDone, setGeoPositionDone] = useState('fail');
   const [zipCode, setZipCode] = useState('');
   const [countryCode, setCountryCode] = useState();
-  const [defaultLocation, setDefaultLocation] = useState({
-    zip: '',
-    country: '',
-  });
+  const [defaultLocation, setDefaultLocation] = useState();
 
   const getWeatherByZip = (zip, country) => {
     if (zip.length === 0) return;
-    sendAPIRequest(`zip=${zip},${country}`);
+    sendAPIRequest(`zip=${zip},${country}`, zip);
   };
 
-  const sendAPIRequest = async (posOrZip) => {
+  const sendAPIRequest = async (posOrZip, zip = zipCode) => {
     const apiKey = process.env.REACT_APP_OWMAP_API_KEY;
     const url = `${URL}${apiKey}&${posOrZip}`;
 
-    console.log('Fetching weather data...', url);
     fetch(url)
       .then((response) => response.json())
       .then((data) => {
         if (data.cod === RESPONSE_OK) {
           const weather = {
+            zip,
             name: data.name,
             temp: data.main.temp,
             min: data.main.temp_min,
@@ -58,19 +46,27 @@ const WeatherApp = () => {
             date: data.dt,
             timezone: data.timezone,
           };
-          if (weatherData.name.length === 0) setWeatherData(weather);
+          console.log(weather);
+          if (zip === defaultLocation.zip) {
+            setCurrLocWeather(weather);
+            setZipCode('');
+            return;
+          }
           const tempList = [...weatherList];
-          if (
-            weatherList &&
-            weatherList.findIndex((w) => w.name === weather.name) < 0
-          ) {
-            console.log('Push: ', weather);
+          const index = getAllWeatherData().findIndex(
+            (w) => w.zip === weather.zip
+          );
+          console.log(`${index}: ${weather.zip}`);
+          if (index < 0) {
+            console.log('PUSH', weather);
             tempList.push(weather);
             setWeatherList(tempList);
+          } else {
+            tempList[index] = weather;
+            setWeatherList(tempList);
           }
-        } else {
-          setZipCode('');
         }
+        setZipCode('');
       })
       .catch((err) => {
         throw new Error(`${err.cod} Message: ${err.message}`);
@@ -83,8 +79,9 @@ const WeatherApp = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.country.length === COUNTRY_CODE_SZ) {
-          setDefaultLocation({ zip: data.postal, country: data.country });
           setCountryCode(data.country);
+          setZipCode(data.postal);
+          setDefaultLocation({ zip: data.postal, country: data.country });
         }
       });
   };
@@ -105,14 +102,19 @@ const WeatherApp = () => {
   }, []);
 
   useEffect(() => {
-    if (geoPositionDone === RESPONSE_OK) return;
+    if (!Boolean(defaultLocation) || geoPositionDone === RESPONSE_OK) return;
+    console.log(defaultLocation);
     getWeatherByZip(defaultLocation.zip, defaultLocation.country);
   }, [defaultLocation]);
 
   const addWeather = (event) => {
     event.preventDefault();
     if (zipCode.length >= MIN_ZIPLENGTH && zipCode.length <= MAX_ZIPLENGTH) {
-      getWeatherByZip(zipCode, countryCode);
+      const weatherIndex = getAllWeatherData().findIndex(
+        (w) => w.zip === zipCode
+      );
+      console.log(weatherIndex);
+      if (weatherIndex < 0) getWeatherByZip(zipCode, countryCode);
     } else {
       setZipCode('');
     }
@@ -123,7 +125,14 @@ const WeatherApp = () => {
     setWeatherList(tempList);
   };
 
-  if (weatherData.name.length === 0) {
+  const refreshWeather = () => {
+    getWeatherByZip(defaultLocation.zip, defaultLocation.country);
+    weatherList.map((weather) => getWeatherByZip(weather.zip, countryCode));
+  };
+
+  const getAllWeatherData = () => [...weatherList, currLocWeather];
+
+  if (!Boolean(currLocWeather)) {
     return (
       <Div>
         <WeatherAppLoader />
@@ -131,17 +140,17 @@ const WeatherApp = () => {
     );
   }
 
-  console.log('Render: ', weatherList);
+  console.log(weatherList);
+
   const listData = weatherList.map((w, i) => {
-    if (i > 0)
-      return (
-        <Weather
-          key={i}
-          currentData={w}
-          showClose={true}
-          removeData={removeWeather}
-        />
-      );
+    return (
+      <Weather
+        key={w.zip}
+        currentData={w}
+        showClose={true}
+        removeData={removeWeather}
+      />
+    );
   });
 
   return (
@@ -151,9 +160,16 @@ const WeatherApp = () => {
         countryCode={countryCode}
         setZipCode={setZipCode}
         onSubmit={addWeather}
+        onRefresh={refreshWeather}
       />
-      {weatherData && <Weather currentData={weatherData} showClose={false} />}
-      {weatherList && weatherList.length > 1 && listData}
+      {currLocWeather && (
+        <Weather
+          key={currLocWeather.zip}
+          currentData={currLocWeather}
+          showClose={false}
+        />
+      )}
+      {weatherList && listData}
     </Div>
   );
 };

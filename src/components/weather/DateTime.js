@@ -9,6 +9,18 @@ const DateTime = ({ timestamp }) => {
   const minute = date.slice(20, 22);
   const amPm = hour < 12 ? 'AM' : 'PM';
 
+  const options = {
+    weekday: 'short',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZone: 'UTC',
+  };
+  const date1 = new Intl.DateTimeFormat('en-US', options).format(
+    timestamp * 1000
+  );
+
+  console.log(date1);
+
   return (
     <Span>
       {day}, {hour}:{minute} {amPm}

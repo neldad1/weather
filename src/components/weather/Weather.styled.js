@@ -7,32 +7,36 @@ const MainDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
-  justify-content: left;
+  justify-content: space-between;
   color: white;
-  padding: 1em;
-  margin: 1em auto;
+  padding: 0.5em;
+  margin: 0.25em auto;
+  align-items: center;
+  position: relative;
 `;
 
 const H1 = styled.h1`
-  font-size: 2.5em;
+  font-size: 1.8em;
+  margin: 0;
 `;
 
 const H2 = styled.h2`
   font-size: 1em;
+  margin: 0;
 `;
 
 const ColFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  flex: 1;
+  align-items: flex-start;
 `;
 
 const FlexDiv = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
+  width: inherit;
 `;
 
 const LocationDiv = styled.div`
@@ -42,12 +46,21 @@ const LocationDiv = styled.div`
 `;
 
 const P = styled.div`
-  font-size: 1em;
+  font-size: 0.9em;
+  flex: 1;
+  text-align: left;
+  word-break: break-word;
+  max-width: 98%;
+`;
+
+const Span = styled.div`
+  font-size: 0.75em;
+  text-align: left;
 `;
 
 const Icon = styled.img`
-  width: 6em;
-  height: 6em;
+  width: 2em;
+  height: 2em;
 `;
 
-export { MainDiv, H1, H2, LocationDiv, ColFlexDiv, FlexDiv, P, Icon };
+export { MainDiv, H1, H2, LocationDiv, ColFlexDiv, FlexDiv, P, Icon, Span };

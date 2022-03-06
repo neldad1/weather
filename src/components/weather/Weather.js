@@ -7,12 +7,14 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import DateTime from './DateTime';
 
 const Weather = ({ currentData, showClose, removeData }) => {
-  const { temp, min, max, description, icon, date, timezone } = currentData;
+  const { name, main, weather, dt, timezone } = currentData.data;
 
-  const weatherDesc = description
+  const weatherDesc = weather[0].description
     .split(' ')
     .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
     .join(' ');
+
+  const icon = weather[0].icon;
 
   const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
@@ -21,9 +23,7 @@ const Weather = ({ currentData, showClose, removeData }) => {
       ? 'weather/kai-pilger-Ef6iL87-vOA-unsplash.jpg'
       : 'weather/sam-marchand-XeqY9vC-APs-unsplash.jpg';
 
-  const timestamp = date + timezone;
-  //console.log(dateTime);
-  // const dateNow = new Date(dateTime * 1000);
+  const timestamp = dt + timezone;
 
   /* return (
     <MainDiv imageUrl={imageUrl}>
@@ -47,7 +47,7 @@ const Weather = ({ currentData, showClose, removeData }) => {
           onClick={() => removeData(currentData)}
         />
       )}
-      <Location name={currentData.name} />
+      <Location name={name} />
       <FlexDiv>
         <ColFlexDiv>
           <FlexDiv>
@@ -56,7 +56,7 @@ const Weather = ({ currentData, showClose, removeData }) => {
           </FlexDiv>
           <DateTime timestamp={timestamp} />
         </ColFlexDiv>
-        <Temperature temp={temp} min={min} max={max} />
+        <Temperature tempData={main} />
       </FlexDiv>
     </MainDiv>
   );

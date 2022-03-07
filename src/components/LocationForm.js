@@ -5,7 +5,11 @@ import {
   faPlus,
   faArrowRotateRight,
 } from '@fortawesome/free-solid-svg-icons';
-import { Form, Span, ZipInput } from './LocationForm.styled';
+import {
+  LocMainForm,
+  LocationSpan,
+  LocationInput,
+} from './LocationForm.styled';
 
 const LocationForm = ({
   zipCode,
@@ -17,22 +21,28 @@ const LocationForm = ({
   const placeholder = `Enter zip code`;
 
   return (
-    <Form onSubmit={onSubmit}>
-      <Span>{countryCode}</Span>
+    <LocMainForm onSubmit={onSubmit}>
+      <LocationSpan>{countryCode}</LocationSpan>
       <FontAwesomeIcon icon={faLocationDot} />
-      <ZipInput
+      <LocationInput
         placeholder={placeholder}
         type="number"
         value={zipCode}
         onChange={(e) => setZipCode(e.target.value)}
       />
-      <FontAwesomeIcon icon={faPlus} size="lg" onClick={onSubmit} />
+      <FontAwesomeIcon
+        icon={faPlus}
+        size="lg"
+        onClick={onSubmit}
+        className="fa-icon"
+      />
       <FontAwesomeIcon
         icon={faArrowRotateRight}
         size="lg"
         onClick={onRefresh}
+        className="fa-icon"
       />
-    </Form>
+    </LocMainForm>
   );
 };
 

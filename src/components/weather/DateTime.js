@@ -1,5 +1,5 @@
 import React from 'react';
-import { Span } from './Weather.styled';
+import { WeatherSpan } from './Weather.styled';
 
 const DateTime = ({ timestamp }) => {
   const options = {
@@ -12,7 +12,7 @@ const DateTime = ({ timestamp }) => {
     timestamp * 1000
   );
 
-  return <Span>{date}</Span>;
+  return <WeatherSpan>{date}</WeatherSpan>;
 };
 
 export default DateTime;

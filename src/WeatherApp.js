@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Div } from './WeatherApp.styled';
+import { WeatherAppDiv } from './WeatherApp.styled';
 import LocationForm from './components/LocationForm';
 import Weather from './components/weather/Weather';
 import WeatherAppLoader from './components/WeatherAppLoader';
+import 'antd/dist/antd.min.css';
 import './WeatherApp.css';
 import WeatherList from './components/weather/WeatherList';
 import { message } from 'antd';
-import 'antd/dist/antd.min.css';
 
 const URL =
   'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=';
@@ -148,7 +148,7 @@ const WeatherApp = () => {
   }
 
   return (
-    <Div>
+    <WeatherAppDiv>
       <LocationForm
         zipCode={zipCode}
         countryCode={countryCode}
@@ -166,7 +166,7 @@ const WeatherApp = () => {
       {weatherList && (
         <WeatherList listData={weatherList} removeWeather={removeWeather} />
       )}
-    </Div>
+    </WeatherAppDiv>
   );
 };
 

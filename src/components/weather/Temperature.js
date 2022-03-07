@@ -1,15 +1,15 @@
 import React from 'react';
-import { ColFlexDiv, H1, Span } from './Weather.styled';
+import { ColFlexDiv, WeatherH1, WeatherSpan } from './Weather.styled';
 
 const Temperature = ({ tempData }) => {
   const { temp, temp_min, temp_max } = tempData;
 
   return (
     <ColFlexDiv>
-      <H1>{Math.round(temp)}&#176;</H1>
-      <Span>
+      <WeatherH1>{Math.round(temp)}&#176;</WeatherH1>
+      <WeatherSpan>
         L:{Math.round(temp_min)}&#176; H:{Math.round(temp_max)}&#176;
-      </Span>
+      </WeatherSpan>
     </ColFlexDiv>
   );
 };

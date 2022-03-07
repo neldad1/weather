@@ -1,17 +1,17 @@
 import styled from 'styled-components';
 
-const Form = styled.form`
+const LocMainForm = styled.form`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin: 0.25em 2em;
+  margin: 0.25em 2em 1em 2em;
 `;
 
-const Span = styled.span`
+const LocationSpan = styled.span`
   font-size: 1em;
 `;
 
-const ZipInput = styled.input`
+const LocationInput = styled.input`
   background-color: transparent;
   border: 1px solid grey;
   border-radius: 0.25em;
@@ -23,4 +23,4 @@ const ZipInput = styled.input`
   padding-left: 1em;
 `;
 
-export { Form, Span, ZipInput };
+export { LocMainForm, LocationSpan, LocationInput };

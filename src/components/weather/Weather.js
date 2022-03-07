@@ -1,7 +1,13 @@
 import React from 'react';
 import Location from './Location';
 import Temperature from './Temperature';
-import { MainDiv, ColFlexDiv, P, Icon, FlexDiv } from './Weather.styled';
+import {
+  WeatherDiv,
+  ColFlexDiv,
+  WeatherP,
+  WeatherImg,
+  FlexDiv,
+} from './Weather.styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import DateTime from './DateTime';
@@ -26,7 +32,7 @@ const Weather = ({ currentData, showClose, removeData }) => {
   const timestamp = dt + timezone;
 
   return (
-    <MainDiv imageUrl={imageUrl}>
+    <WeatherDiv imageUrl={imageUrl}>
       {showClose && (
         <FontAwesomeIcon
           icon={faXmark}
@@ -39,14 +45,14 @@ const Weather = ({ currentData, showClose, removeData }) => {
       <FlexDiv>
         <ColFlexDiv>
           <FlexDiv>
-            <Icon src={iconUrl} alt="weatherIcon" />
-            <P>{weatherDesc}</P>
+            <WeatherImg src={iconUrl} alt="weatherIcon" />
+            <WeatherP>{weatherDesc}</WeatherP>
           </FlexDiv>
           <DateTime timestamp={timestamp} />
         </ColFlexDiv>
         <Temperature tempData={main} />
       </FlexDiv>
-    </MainDiv>
+    </WeatherDiv>
   );
 };
 

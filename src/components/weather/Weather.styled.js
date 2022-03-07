@@ -1,30 +1,30 @@
 import styled from 'styled-components';
 
-const MainDiv = styled.div`
+const WeatherDiv = styled.div`
   background-image: url(${(props) => props.imageUrl});
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
   flex-direction: column;
-  width: 300px;
+  //width: 300px;
   justify-content: space-between;
   color: white;
   padding: 0.5em;
-  margin: 0.25em auto;
+  margin: 0 1em 0.25em 1em;
   align-items: center;
   position: relative;
   border-radius: 0.2em;
   color: white;
 `;
 
-const H1 = styled.h1`
-  font-size: 1.8em;
+const WeatherH1 = styled.h1`
+  font-size: 2em;
   margin: 0;
   color: inherit;
 `;
 
-const H2 = styled.h2`
-  font-size: 1em;
+const WeatherH2 = styled.h2`
+  font-size: 1.25em;
   margin: 0;
   color: inherit;
 `;
@@ -39,8 +39,8 @@ const ColFlexDiv = styled.div`
 const FlexDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: inherit;
+  align-items: flex-end;
+  width: 100%;
 `;
 
 const LocationDiv = styled.div`
@@ -49,8 +49,8 @@ const LocationDiv = styled.div`
   justify-content: center;
 `;
 
-const P = styled.div`
-  font-size: 0.9em;
+const WeatherP = styled.p`
+  font-size: 1em;
   flex: 1;
   text-align: left;
   word-break: break-word;
@@ -58,15 +58,25 @@ const P = styled.div`
   color: inherit;
 `;
 
-const Span = styled.div`
-  font-size: 0.75em;
+const WeatherSpan = styled.span`
+  font-size: 0.8em;
   text-align: left;
   color: inherit;
 `;
 
-const Icon = styled.img`
+const WeatherImg = styled.img`
   width: 2em;
   height: 2em;
 `;
 
-export { MainDiv, H1, H2, LocationDiv, ColFlexDiv, FlexDiv, P, Icon, Span };
+export {
+  WeatherDiv,
+  WeatherH1,
+  WeatherH2,
+  LocationDiv,
+  ColFlexDiv,
+  FlexDiv,
+  WeatherP,
+  WeatherImg,
+  WeatherSpan,
+};

@@ -5,3 +5,8 @@
   top:0;
   right:0;
 }
+
+.fa-icon:hover {
+  zoom: 1.1;
+  cursor: pointer;
+}

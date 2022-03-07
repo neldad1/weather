@@ -4,36 +4,29 @@ const WeatherDiv = styled.div`
   background-image: url(${(props) => props.imageUrl});
   background-repeat: no-repeat;
   background-size: cover;
-  display: flex;
-  flex-direction: column;
-  //width: 300px;
-  justify-content: space-between;
   color: white;
   padding: 0.5em;
   margin: 0 1em 0.25em 1em;
-  align-items: center;
   position: relative;
   border-radius: 0.2em;
   color: white;
 `;
 
 const WeatherH1 = styled.h1`
-  font-size: 2em;
+  font-size: 1.5em;
   margin: 0;
   color: inherit;
 `;
 
 const WeatherH2 = styled.h2`
   font-size: 1.25em;
-  margin: 0;
+  margin: 0 0.25em;
   color: inherit;
 `;
 
 const ColFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
 `;
 
 const FlexDiv = styled.div`
@@ -49,19 +42,10 @@ const LocationDiv = styled.div`
   justify-content: center;
 `;
 
-const WeatherP = styled.p`
-  font-size: 1em;
+const WeatherSpan = styled.span`
+  font-size: ${(props) => props.fontSz ?? '0.8em'};
   flex: 1;
   text-align: left;
-  word-break: break-word;
-  max-width: 98%;
-  color: inherit;
-`;
-
-const WeatherSpan = styled.span`
-  font-size: 0.8em;
-  text-align: left;
-  color: inherit;
 `;
 
 const WeatherImg = styled.img`
@@ -76,7 +60,6 @@ export {
   LocationDiv,
   ColFlexDiv,
   FlexDiv,
-  WeatherP,
   WeatherImg,
   WeatherSpan,
 };

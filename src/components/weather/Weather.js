@@ -1,16 +1,11 @@
 import React from 'react';
 import Location from './Location';
 import Temperature from './Temperature';
-import {
-  WeatherDiv,
-  ColFlexDiv,
-  WeatherP,
-  WeatherImg,
-  FlexDiv,
-} from './Weather.styled';
+import { WeatherDiv, ColFlexDiv, FlexDiv } from './Weather.styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import DateTime from './DateTime';
+import Description from './Description';
 
 const Weather = ({ currentData, showClose, removeData }) => {
   const { name, main, weather, dt, timezone } = currentData.data;
@@ -21,13 +16,9 @@ const Weather = ({ currentData, showClose, removeData }) => {
     .join(' ');
 
   const icon = weather[0].icon;
-
-  const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
-
-  const imageUrl =
-    icon.slice(-1) === 'n'
-      ? 'weather/kai-pilger-Ef6iL87-vOA-unsplash.jpg'
-      : 'weather/sam-marchand-XeqY9vC-APs-unsplash.jpg';
+  const imageUrl = icon.includes('n')
+    ? 'weather/kai-pilger-Ef6iL87-vOA-unsplash.jpg'
+    : 'weather/sam-marchand-XeqY9vC-APs-unsplash.jpg';
 
   const timestamp = dt + timezone;
 
@@ -44,10 +35,7 @@ const Weather = ({ currentData, showClose, removeData }) => {
       <Location name={name} />
       <FlexDiv>
         <ColFlexDiv>
-          <FlexDiv>
-            <WeatherImg src={iconUrl} alt="weatherIcon" />
-            <WeatherP>{weatherDesc}</WeatherP>
-          </FlexDiv>
+          <Description weatherDesc={weatherDesc} weatherIcon={icon} />
           <DateTime timestamp={timestamp} />
         </ColFlexDiv>
         <Temperature tempData={main} />

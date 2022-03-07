@@ -25,18 +25,6 @@ const Weather = ({ currentData, showClose, removeData }) => {
 
   const timestamp = dt + timezone;
 
-  /* return (
-    <MainDiv imageUrl={imageUrl}>
-      <Location name={currentData.name} />
-      <FlexDiv>
-        <Temperature temp={temp} min={temp_min} max={temp_max} />
-        <ColFlexDiv>
-          <Icon src={iconUrl} alt="weatherIcon" />
-          <P>{weatherDesc}</P>
-        </ColFlexDiv>
-      </FlexDiv>
-    </MainDiv>
-  ); */
   return (
     <MainDiv imageUrl={imageUrl}>
       {showClose && (

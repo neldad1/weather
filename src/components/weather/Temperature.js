@@ -3,6 +3,7 @@ import { ColFlexDiv, H1, Span } from './Weather.styled';
 
 const Temperature = ({ tempData }) => {
   const { temp, temp_min, temp_max } = tempData;
+
   return (
     <ColFlexDiv>
       <H1>{Math.round(temp)}&#176;</H1>

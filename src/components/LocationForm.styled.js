@@ -4,7 +4,7 @@ const Form = styled.form`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  margin: 0.25em 3em;
+  margin: 0.25em 2em;
 `;
 
 const Span = styled.span`

@@ -5,21 +5,32 @@ import Weather from './components/weather/Weather';
 import WeatherAppLoader from './components/WeatherAppLoader';
 import './WeatherApp.css';
 import WeatherList from './components/weather/WeatherList';
+import { message } from 'antd';
+import 'antd/dist/antd.min.css';
 
 const URL =
   'https://api.openweathermap.org/data/2.5/weather?units=metric&appid=';
 const IPAPI_URL = 'https://ipinfo.io?token=';
 const RESPONSE_OK = 200;
+const RESPONSE_NOT_FOUND = 404;
 const RESPONSE_NG = 'NG';
 const COUNTRY_CODE_SZ = 2;
 const MIN_ZIPLENGTH = 4;
 const MAX_ZIPLENGTH = 10;
+
+const errorZipCodeInput = (isValid) => {
+  if (isValid) message.error('The zip code is not found in your country.');
+  else message.error('The zip code is not valid.');
+};
 
 const networkRequest = async (query) => {
   const resp = await fetch(
     `${URL}${process.env.REACT_APP_OWMAP_API_KEY}&${query}`
   );
   const data = await resp.json();
+
+  if (parseInt(data.cod) === RESPONSE_NOT_FOUND) errorZipCodeInput(true);
+
   return data.cod === RESPONSE_OK ? data : undefined;
 };
 
@@ -39,12 +50,10 @@ const WeatherApp = () => {
     const jsonResponse = await networkRequest(`zip=${zip},${country}`);
     if (jsonResponse) {
       if (isDefLoc) {
-        console.log(jsonResponse);
         setLocalWeather({ zip: zip, data: jsonResponse });
-        setZipCode('');
-        return;
+      } else {
+        updateWeatherInList({ zip: zip, data: jsonResponse });
       }
-      updateWeatherInList({ zip: zip, data: jsonResponse });
     }
     setZipCode('');
   };
@@ -55,18 +64,6 @@ const WeatherApp = () => {
       setLocalWeather({ zip: '', data: jsonResponse });
     }
   };
-
-  /* const getWeatherByCityName = async (city, isLocal = false) => {
-    const jsonResponse = await networkRequest(`q=${city}`);
-    console.log(jsonResponse);
-    if (jsonResponse) {
-      if (isLocal) {
-        setLocalWeather(jsonResponse);
-        return;
-      }
-      updateWeatherInList(jsonResponse);
-    }
-  }; */
 
   const getIPAPI = () => {
     const token = process.env.REACT_APP_IPINFO_TOKEN;
@@ -99,6 +96,7 @@ const WeatherApp = () => {
 
   useEffect(() => {
     if (!Boolean(defaultLocation) || geoPosition !== RESPONSE_NG) return;
+
     getWeatherByZip(defaultLocation.zip, defaultLocation.country, true);
   }, [defaultLocation]);
 
@@ -116,6 +114,7 @@ const WeatherApp = () => {
     if (zipCode.length >= MIN_ZIPLENGTH && zipCode.length <= MAX_ZIPLENGTH) {
       getWeatherByZip(zipCode);
     } else {
+      errorZipCodeInput(false);
       setZipCode('');
     }
   };
@@ -136,7 +135,6 @@ const WeatherApp = () => {
     const tempList = [...weatherList];
     const weatherIndex = getIndexOfWeather(weather.zip);
 
-    console.log(weatherIndex);
     if (weatherIndex === -1) tempList.push(weather);
     else tempList[weatherIndex] = weather;
 
@@ -146,25 +144,8 @@ const WeatherApp = () => {
   const getAllWeatherData = () => [...weatherList, localWeather];
 
   if (!Boolean(localWeather)) {
-    return (
-      <Div>
-        <WeatherAppLoader />
-      </Div>
-    );
+    return <WeatherAppLoader />;
   }
-
-  const listData = weatherList.map((weather) => {
-    return (
-      weather && (
-        <Weather
-          key={weather.zip}
-          currentData={weather}
-          showClose={true}
-          removeData={removeWeather}
-        />
-      )
-    );
-  });
 
   return (
     <Div>
@@ -182,7 +163,9 @@ const WeatherApp = () => {
           showClose={false}
         />
       )}
-      {weatherList && listData}
+      {weatherList && (
+        <WeatherList listData={weatherList} removeWeather={removeWeather} />
+      )}
     </Div>
   );
 };

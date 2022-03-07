@@ -14,16 +14,19 @@ const MainDiv = styled.div`
   align-items: center;
   position: relative;
   border-radius: 0.2em;
+  color: white;
 `;
 
 const H1 = styled.h1`
   font-size: 1.8em;
   margin: 0;
+  color: inherit;
 `;
 
 const H2 = styled.h2`
   font-size: 1em;
   margin: 0;
+  color: inherit;
 `;
 
 const ColFlexDiv = styled.div`
@@ -52,11 +55,13 @@ const P = styled.div`
   text-align: left;
   word-break: break-word;
   max-width: 98%;
+  color: inherit;
 `;
 
 const Span = styled.div`
   font-size: 0.75em;
   text-align: left;
+  color: inherit;
 `;
 
 const Icon = styled.img`
